@@ -18,11 +18,32 @@ export default function Admin(){
         const { data, error } = await supabase
         .from('proyect')
         .select('*')
-        .eq('is_public', true)
         .order('created_at', { ascending: false })
         if (error) console.error(error)
         if (data) setProyects(data)
     }
+
+    const changePublicProyects = async (id: number) => {
+        const { data: proyect, error: fetchError } = await supabase
+            .from("proyect")
+            .select("is_public")
+            .eq("id", id)
+            .single()
+
+        if (fetchError) {
+            console.error(fetchError)
+            return
+        }
+        const { data, error } = await supabase
+            .from("proyect")
+            .update({ is_public: !proyect.is_public })
+            .eq("id", id)
+            .select()
+        if (error) console.error(error)
+        if (data) setProyects(data)
+    }
+
+
 
     const fetchTech= async () => {
         const { data, error } = await supabase
@@ -46,14 +67,6 @@ export default function Admin(){
         fetchTechType()
     },[])
 
-    useEffect(()=>{
-        console.log(tech)
-    },[tech])
-
-    useEffect(()=>{
-        console.log(techType)
-    },[techType])
-
     return(
         <div className="admin">
             <div>
@@ -65,7 +78,8 @@ export default function Admin(){
                     <TableRow>
                         <TableCell>ID</TableCell>
                         <TableCell>Titulo</TableCell>
-                        <TableCell>fecha</TableCell>
+                        <TableCell>Fecha</TableCell>
+                        <TableCell>Publico</TableCell>
                         <TableCell>Acción</TableCell>
                     </TableRow>
                 </TableHead>
@@ -75,7 +89,12 @@ export default function Admin(){
                             <TableCell>{proyect.id}</TableCell>
                             <TableCell>{proyect.title}</TableCell>
                             <TableCell>{proyect.created_at}</TableCell>
-                            <TableCell></TableCell>
+                            <TableCell>{proyect.is_public ? "Si": "No"}</TableCell>
+                            <TableCell>
+                                <button onClick={()=>{changePublicProyects(proyect.id)}}>
+                                    Cambiar visibilidad
+                                </button>
+                            </TableCell>
                         </TableRow>
                     )})}
                 </TableBody>
