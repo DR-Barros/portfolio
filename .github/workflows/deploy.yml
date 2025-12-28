@@ -37,7 +37,7 @@ jobs:
         run: npm run build
 
       - name: SPA fallback for GitHub Pages
-        run: cp portfolio/dist/index.html portfolio/dist/404.html
+        run: cp dist/index.html dist/404.html
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
