@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
 import AddTechType from "./components/AddTechType"
 import "./Admin.css"
 import AddTech from "./components/AddTech"
+import AddProyect from "./components/AddProyect"
 
 
 export default function Admin(){
@@ -99,6 +100,7 @@ export default function Admin(){
                     )})}
                 </TableBody>
             </Table>
+            <AddProyect update={fetchProyects} />
             </div>
             <div>
             <h1>
