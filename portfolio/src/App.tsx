@@ -1,26 +1,27 @@
 // src/App.tsx
-import { useState } from 'react'
-import { supabase } from './lib/supabase'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Suspense, lazy } from "react";
+const Portfolio = lazy(()=> import("./lib/pages/Portfolio/Portfolio"))
+const Login = lazy(()=> import("./lib/pages/Login/Login"))
+const Admin = lazy(()=> import("./lib/pages/Admin/Admin"))
+import { CircularProgress } from "@mui/material";
+import PrivateRoute from "./lib/components/PrivateRoute";
 
-function App() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
 
-  const login = async () => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-    if (error) alert(error.message)
-  }
-
-  return (
-    <div>
-      <input placeholder="email" onChange={e => setEmail(e.target.value)} />
-      <input type="password" placeholder="password" onChange={e => setPassword(e.target.value)} />
-      <button onClick={login}>Login</button>
-    </div>
-  )
+function App(){
+    return(
+        <BrowserRouter>
+        <Suspense fallback={<div style={{display: "flex", justifyContent: "center", alignItems: "center", height: "100vh"}}><CircularProgress /></div>}>
+            <Routes>
+                <Route path="/" element={<Portfolio />} />
+                <Route path="/login" element={<Login />} />
+                <Route element={<PrivateRoute />}>
+                    <Route path="/admin" element={<Admin/>} />
+                </Route>
+            </Routes>
+        </Suspense>
+        </BrowserRouter>
+    )
 }
 
 export default App

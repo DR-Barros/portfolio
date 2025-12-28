@@ -1,0 +1,149 @@
+import { useEffect, useState } from "react"
+import { supabase } from "../../supabase"
+import type { Proyects } from "../../types/proyects"
+import type { Tech } from "../../types/tech"
+import type { TechType } from "../../types/tech_type"
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
+import AddTechType from "./components/AddTechType"
+import "./Admin.css"
+import AddTech from "./components/AddTech"
+
+
+export default function Admin(){
+    const [proyects, setProyects] = useState<Proyects[]>([])
+    const [tech, setTech] = useState<Tech[]>([])
+    const [techType, setTechType] = useState<TechType[]>([])
+    
+    const fetchProyects= async () => {
+        const { data, error } = await supabase
+        .from('proyect')
+        .select('*')
+        .eq('is_public', true)
+        .order('created_at', { ascending: false })
+        if (error) console.error(error)
+        if (data) setProyects(data)
+    }
+
+    const fetchTech= async () => {
+        const { data, error } = await supabase
+        .from('tech')
+        .select('id, technology, tech_type(id, type)')
+        if (error) console.error(error)
+        if (data) setTech(data)
+    }
+
+    const fetchTechType= async () => {
+        const { data, error } = await supabase
+        .from('tech_type')
+        .select('*')
+        if (error) console.error(error)
+        if (data) setTechType(data)
+    }
+
+    useEffect(()=>{
+        fetchProyects()
+        fetchTech()
+        fetchTechType()
+    },[])
+
+    useEffect(()=>{
+        console.log(tech)
+    },[tech])
+
+    useEffect(()=>{
+        console.log(techType)
+    },[techType])
+
+    return(
+        <div className="admin">
+            <div>
+            <h1>
+                Proyectos
+            </h1>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>ID</TableCell>
+                        <TableCell>Titulo</TableCell>
+                        <TableCell>fecha</TableCell>
+                        <TableCell>Acción</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {proyects.map((proyect)=>{return(
+                        <TableRow key={proyect.id}>
+                            <TableCell>{proyect.id}</TableCell>
+                            <TableCell>{proyect.title}</TableCell>
+                            <TableCell>{proyect.created_at}</TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
+                    )})}
+                </TableBody>
+            </Table>
+            </div>
+            <div>
+            <h1>
+                Trabajos
+            </h1>
+            </div>
+            <div>
+            <h1>
+                Tecnologias
+            </h1>
+            <div className="row">
+            <div>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>ID</TableCell>
+                        <TableCell>Tecnologia</TableCell>
+                        <TableCell>Tipo</TableCell>
+                        <TableCell>Acción</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {tech.map((t)=>{return(
+                        <TableRow key={t.id}>
+                            <TableCell>{t.id}</TableCell>
+                            <TableCell>{t.technology}</TableCell>
+                            <TableCell>{t.tech_type instanceof Array ? t.tech_type[0].type : t.tech_type.type}</TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
+                    )})}
+                </TableBody>
+            </Table>
+            </div>
+            <div>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>ID</TableCell>
+                        <TableCell>Tipo</TableCell>
+                        <TableCell>Acción</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {techType.map((t)=>{return(
+                        <TableRow key={t.id}>
+                            <TableCell>{t.id}</TableCell>
+                            <TableCell>{t.type}</TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
+                    )})}
+                </TableBody>
+            </Table>
+            </div>
+            </div>
+            <div className="row">
+                <AddTechType
+                    update={fetchTechType}
+                />
+                <AddTech
+                    update={fetchTech}
+                    techType={techType}
+                />
+            </div>
+            </div>
+        </div>
+    )
+}
