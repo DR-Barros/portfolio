@@ -16,4 +16,12 @@
     max-width: 1000px;
     width: 100%;
     text-align: left;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+.proyectos h2{
+    width: 100%;
 }
