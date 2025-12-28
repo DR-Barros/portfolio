@@ -7,10 +7,11 @@ const Admin = lazy(()=> import("./lib/pages/Admin/Admin"))
 import { CircularProgress } from "@mui/material";
 import PrivateRoute from "./lib/components/PrivateRoute";
 
+const basename = import.meta.env.PROD ? "/portfolio" : "/"
 
 function App(){
     return(
-        <BrowserRouter>
+        <BrowserRouter basename={basename}>
         <Suspense fallback={<div style={{display: "flex", justifyContent: "center", alignItems: "center", height: "100vh"}}><CircularProgress /></div>}>
             <Routes>
                 <Route path="/" element={<Portfolio />} />
