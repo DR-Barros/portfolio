@@ -36,6 +36,9 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: npm run build
 
+      - name: SPA fallback for GitHub Pages
+        run: cp portfolio/dist/index.html portfolio/dist/404.html
+
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
