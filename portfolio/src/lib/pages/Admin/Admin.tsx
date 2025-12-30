@@ -8,12 +8,14 @@ import AddTechType from "./components/AddTechType"
 import "./Admin.css"
 import AddTech from "./components/AddTech"
 import AddProyect from "./components/AddProyect"
+import { useNavigate } from 'react-router-dom'
 
 
 export default function Admin(){
     const [proyects, setProyects] = useState<Proyects[]>([])
     const [tech, setTech] = useState<Tech[]>([])
     const [techType, setTechType] = useState<TechType[]>([])
+    const navigate = useNavigate();
     
     const fetchProyects= async () => {
         const { data, error } = await supabase
@@ -91,9 +93,14 @@ export default function Admin(){
                             <TableCell>{proyect.title}</TableCell>
                             <TableCell>{proyect.created_at}</TableCell>
                             <TableCell>{proyect.is_public ? "Si": "No"}</TableCell>
-                            <TableCell>
+                            <TableCell sx={{display: "flex", flexDirection: "column"}}>
                                 <button onClick={()=>{changePublicProyects(proyect.id)}}>
                                     Cambiar visibilidad
+                                </button>
+                                <button onClick={()=>{
+                                    navigate("proyect/"+proyect.id)
+                                }}>
+                                    editar
                                 </button>
                             </TableCell>
                         </TableRow>
