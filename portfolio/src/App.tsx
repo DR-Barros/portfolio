@@ -5,6 +5,7 @@ const Portfolio = lazy(()=> import("./lib/pages/Portfolio/Portfolio"))
 const Login = lazy(()=> import("./lib/pages/Login/Login"))
 const Admin = lazy(()=> import("./lib/pages/Admin/Admin"))
 const AdminProyect = lazy(()=> import("./lib/pages/Admin/pages/Proyect"))
+const AdminChapter = lazy(()=> import("./lib/pages/Admin/pages/Chapter"))
 import { CircularProgress } from "@mui/material";
 import PrivateRoute from "./lib/components/PrivateRoute";
 
@@ -20,6 +21,7 @@ function App(){
                 <Route element={<PrivateRoute />}>
                     <Route path="/admin" element={<Admin/>} />
                     <Route path="/admin/proyect/:id" element={<AdminProyect/>} />
+                    <Route path="/admin/proyect/:id_proyect/chapter/:id" element={<AdminChapter/>} />
                 </Route>
             </Routes>
         </Suspense>

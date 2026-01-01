@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link} from 'react-router-dom';
 import { supabase } from "../../../supabase"
 import { useEffect, useState } from "react"
 import "./Proyect.css"
@@ -207,6 +207,9 @@ export default function Proyect(){
                 <div key={chapter.id} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
                     <h3>{chapter.title}</h3>
                     <p>({chapter.created_at})</p>
+                    <Link to={"chapter/"+chapter.id}>
+                        ir a
+                    </Link>
                 </div>
             )})}
             <AddChapter
