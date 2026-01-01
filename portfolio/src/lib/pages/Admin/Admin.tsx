@@ -163,12 +163,12 @@ export default function Admin(){
             </div>
             </div>
             <div className="row">
-                <AddTechType
-                    update={fetchTechType}
-                />
                 <AddTech
                     update={fetchTech}
                     techType={techType}
+                />
+                <AddTechType
+                    update={fetchTechType}
                 />
             </div>
             </div>
